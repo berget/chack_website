@@ -86,6 +86,12 @@ class Checkpid(object):
 class urltoolslib(object):
 	"""docstring for touchurl"""
 	def __init__(self, url):
+		self._request_headers = {
+			"Accept-Language": "en-US,en;q=0.5",
+			"User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:40.0) Gecko/20100101 Firefox/40.0 ms/1.0",
+			"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+			"Connection": "keep-alive" 
+		}
 		_url = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', url)
 		#沒有值，就不處理直接中斷程序
 		assert _url, 'not url'
@@ -98,7 +104,8 @@ class urltoolslib(object):
 		import urllib2
 
 		try:
-			response = urllib2.urlopen(self.url)
+			request = urllib2.Request(self.url, headers=self._request_headers)
+			response = urllib2.urlopen(request)
 			status_code = response.code
 			if status_code == 200:
 				return response.read()
